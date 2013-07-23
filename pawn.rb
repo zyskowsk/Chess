@@ -12,7 +12,13 @@ class Pawn < Piece
   end
 
   def available_moves
+    move_two = @direction.map { |num| num * 2 }
+    moves = []
+    moves << vector_add(@position, @direction)
+    moves << vector_add(@position, move_two) unless @moved
+    moves.select! { |pos| valid_move?(pos) }
 
+    moves + threatened_opponents
   end
 
   def get_direction
@@ -26,4 +32,9 @@ class Pawn < Piece
   def to_s
     "P".colorize(@color)
   end
+
+  def valid_move?(pos)
+    pos.all? { |coord| (0...8).include?(coord) } && @board.open?(pos)
+  end
+
 end
