@@ -10,9 +10,11 @@ require 'colorize'
 class Board
   def initialize
     @grid = (0...8).map { |row| [" "] * 8 }
+    @colors = [:white, :blue]
     populate
   end
 
+  # Add instance variable for colors
   def populate
     @grid[7] = back_line(:white, 7)
     @grid[6] = Array.new(8).map.with_index do |_, idx|
@@ -43,6 +45,17 @@ class Board
 
   def [](pos)
     @grid[pos.first][pos.last]
+  end
+
+  def get_all_pieces(color)
+    locations = []
+    @grid.each_with_index do |row, i|
+      row.each_with_index do |piece, j|
+        locations << [i,j] if piece.is_a?(Piece) && piece.color == color
+      end
+    end
+
+    locations
   end
 
   def occupied?(pos)
