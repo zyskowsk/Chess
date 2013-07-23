@@ -15,11 +15,11 @@ class Board
 
   def populate
     @grid[7] = back_line(:white, 7)
-    @grid[6] = Array.new(8).map.with_index do |place, idx|
+    @grid[6] = Array.new(8).map.with_index do |_, idx|
       Pawn.new(:white, self, [6, idx])
     end
     @grid[0] = back_line(:blue, 0)
-    @grid[1] = Array.new(8).map do |place, idx|
+    @grid[1] = Array.new(8).map.with_index do |_, idx|
       Pawn.new(:blue, self, [1, idx])
     end
   end
