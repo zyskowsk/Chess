@@ -1,4 +1,10 @@
-require './pieces.rb'
+load './pieces.rb'
+load './pawn.rb'
+load './knight.rb'
+load './rook.rb'
+load './bishop.rb'
+load './queen.rb'
+load './king.rb'
 require 'colorize'
 
 class Board
@@ -8,23 +14,26 @@ class Board
   end
 
   def populate
-    @grid[7] = back_line(:white)
-    @grid[6] = Array.new(8).map { |place| Pawn.new(:white) }
-    @grid[0] = back_line(:blue)
-    @grid[1] = Array.new(8).map { |place| Pawn.new(:blue) }
+    @grid[7] = back_line(:white, 7)
+    @grid[6] = Array.new(8).map.with_index do |place, idx|
+      Pawn.new(:white, self, [6, idx])
+    end
+    @grid[0] = back_line(:blue, 0)
+    @grid[1] = Array.new(8).map do |place, idx|
+      Pawn.new(:blue, self, [1, idx])
+    end
   end
 
 
-  def back_line(color)
-    back_line = [Rook.new(color),
-                 Knight.new(color),
-                 Bishop.new(color),
-                 Queen.new(color),
-                 King.new(color),
-                 Bishop.new(color),
-                 Knight.new(color),
-                 Rook.new(color)]
-    back_line[3], back_line[4] = back_line[4], back_line[3] if color == :black
+  def back_line(color, row)
+    back_line = [Rook.new(color, self, [row, 0]),
+                 Knight.new(color, self, [row, 1]),
+                 Bishop.new(color, self, [row, 2]),
+                 Queen.new(color, self, [row, 3]),
+                 King.new(color, self, [row, 4]),
+                 Bishop.new(color, self, [row, 5]),
+                 Knight.new(color, self, [row, 6]),
+                 Rook.new(color, self, [row, 7])]
     back_line
   end
 
@@ -34,6 +43,14 @@ class Board
 
   def [](pos)
     @grid[pos.first][pos.last]
+  end
+
+  def occupied?(pos)
+    self[pos].is_a?(Piece)
+  end
+
+  def open?(pos)
+    !occupied?(pos)
   end
 
   def to_s
