@@ -1,6 +1,8 @@
 require 'colorize'
 
 class Piece
+  attr_reader :color
+
   def initialize(color, board, position)
     @color = color
     @board = board
@@ -11,7 +13,7 @@ class Piece
     # p "on board? #{pos.all? { |coord| (0...8).include?(coord) }}"
     # p "piece there? "
     pos.all? { |coord| (0...8).include?(coord) } &&
-      @board.open?(pos) # &&  not in check
+      (@board.open?(pos) || @board.opponent_piece?(pos, @color))
   end
 
   def vector_add(pos, disp)
@@ -32,7 +34,8 @@ class Slider < Piece
 
       while valid_move?(curr_pos)
         moves << curr_pos
-        curr_pos = vector_add(@position, direction)
+        break if @board.opponent_piece?(curr_pos, @color)
+        curr_pos = vector_add(curr_pos, direction)
       end
     end
 

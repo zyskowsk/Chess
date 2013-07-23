@@ -53,6 +53,10 @@ class Board
     !occupied?(pos)
   end
 
+  def opponent_piece?(pos, color)
+    self.occupied?(pos) && (self[pos].color != color)
+  end
+
   def to_s
     ret_str = "#{"-" * 33}\n"
     @grid.each do |row|
