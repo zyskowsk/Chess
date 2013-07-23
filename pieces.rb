@@ -9,6 +9,12 @@ class Piece
     @position = position
   end
 
+  def move(pos)
+    @board[pos] = self
+    @board[@position] = " "
+    @position = pos
+  end
+
   def valid_move?(pos)
     # p "on board? #{pos.all? { |coord| (0...8).include?(coord) }}"
     # p "piece there? "
