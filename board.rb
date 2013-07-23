@@ -1,5 +1,6 @@
 require './pieces.rb'
 require 'colorize'
+
 class Board
   def initialize
     @grid = (0...8).map { |row| [" "] * 8 }
@@ -9,8 +10,8 @@ class Board
   def populate
     @grid[7] = back_line(:white)
     @grid[6] = Array.new(8).map { |place| Pawn.new(:white) }
-    @grid[0] = back_line(:black)
-    @grid[1] = Array.new(8).map { |place| Pawn.new(:black) }
+    @grid[0] = back_line(:blue)
+    @grid[1] = Array.new(8).map { |place| Pawn.new(:blue) }
   end
 
 
