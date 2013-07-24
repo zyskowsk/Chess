@@ -23,54 +23,53 @@ class Chess
     puts "#{@board.other_color(player)} won!"
   end
 
-  def play_turn(player)
-    begin
-      puts @board
-      piece = get_piece_position(player)
-      pos = get_move_position(piece)
-      make_move(piece, pos)
-    rescue RuntimeError => e
-      puts e.message
-      retry
-    end
-  end
+  private
 
-  def make_move(piece, pos)
-    unless piece.available_moves.include?(pos)
-      raise InvalidMoveError.new "Position not valid."
-    end
-    unless piece.move_defends_king?(pos)
-      raise InvalidMoveError.new "That puts you in check."
+    def get_coordinates
+      input = gets.chomp.split(" ").map { |coord| Integer(coord) }
+      raise InvalidInputError.new unless input.length == 2
+      input
     end
 
-    piece.move(pos)
-  end
-
-  def get_piece_position(player)
-    puts "What piece do you want to move? (row col)"
-    pos = get_coordinates
-    piece = @board[pos]
-    unless piece.is_a?(Piece) && piece.color == player
-      raise NotYourPieceError.new
+    def get_move_position(piece)
+      puts "Where do you want to move " +
+           "your #{piece.class.to_s.downcase}? (row col)"
+      get_coordinates
     end
 
-    return piece
-  end
+    def get_piece_position(player)
+      puts "What piece do you want to move? (row col)"
+      pos = get_coordinates
+      piece = @board[pos]
 
-  def get_move_position(piece)
-    puts "Where do you want to move " +
-         "your #{piece.class.to_s.downcase}? (row col)"
-    get_coordinates
-  end
+      unless piece.is_a?(Piece) && piece.color == player
+        raise NotYourPieceError.new
+      end
 
-  def get_coordinates
-    input = gets.chomp.split(" ")
-    unless input.length == 2 && input.all? {|coord| coord.to_i.to_s == coord }
-      raise InvalidInputError.new
+      return piece
     end
 
-    input.map(&:to_i)
-  end
+    def make_move(piece, pos)
+      unless piece.available_moves.include?(pos)
+        raise InvalidMoveError.new "Position not valid."
+      end
+      unless piece.move_defends_king?(pos)
+        raise InvalidMoveError.new "That puts you in check."
+      end
+
+      piece.move(pos)
+    end
+
+    def play_turn(player)
+      begin
+        puts @board
+        piece, pos =  get_piece_position(player), get_move_position(piece)
+        make_move(piece, pos)
+      rescue StandardError => e
+        puts e.message
+        retry
+      end
+    end
 end
 
 class InvalidMoveError < RuntimeError
