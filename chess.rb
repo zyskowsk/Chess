@@ -9,6 +9,7 @@ load './board.rb'
 
 require 'colorize'
 class Chess
+  attr_accessor :board
 
   def initialize
     @board = Board.new
@@ -54,7 +55,9 @@ class Chess
         raise NotYourPieceError.new
       end
 
-      return piece
+      raise InvalidPieceSelectionError.new unless piece.has_move?
+
+      piece
     end
 
     def make_move(piece, pos)
@@ -91,14 +94,20 @@ end
 class InvalidMoveError < RuntimeError
 end
 
+class InvalidPieceSelectionError < RuntimeError
+  def initialize(msg = "That piece has no legal moves")
+    super(msg)
+  end
+end
+
 class InvalidInputError < RuntimeError
   def initialize(msg = "Invalid input format, try again.")
-    @message = msg
+    super(msg)
   end
 end
 
 class NotYourPieceError < RuntimeError
   def initialize(msg = "That's not one of your pieces.")
-    @message = msg
+    super(msg)
   end
 end

@@ -25,6 +25,12 @@ class Piece
     Piece.vector_add(@position, Piece.scalar_multiply(direction, distance))
   end
 
+  def has_move?
+    not self.available_moves.select do |move|
+       move_defends_king?(move)
+     end.empty?
+  end
+
   def move(pos)
     @board[pos] = self
     @board[@position] = " "

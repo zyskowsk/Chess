@@ -14,7 +14,7 @@ class King < Stepper
     castle_defends_king?(rook.side)
   end
 
-  def can_castle
+  def can_castle?
     can_castle_with?(@board.find_rook(:left, @color)) ||
     can_castle_with?(@board.find_rook(:right, @color))
   end
