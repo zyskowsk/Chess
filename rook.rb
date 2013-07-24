@@ -1,5 +1,5 @@
 class Rook < Slider
-  attr_accessor :side
+  attr_accessor :side, :moved
 
   def initialize(color, board, pos)
     super(color, board, pos)

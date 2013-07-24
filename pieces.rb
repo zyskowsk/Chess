@@ -21,6 +21,10 @@ class Piece
     @position = position
   end
 
+  def add_displacement(direction, distance)
+    Piece.vector_add(@position, Piece.scalar_multiply(direction, distance))
+  end
+
   def move(pos)
     @board[pos] = self
     @board[@position] = " "

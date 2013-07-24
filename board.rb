@@ -24,6 +24,7 @@ class Board
       if piece.is_a?(Piece)
         new_piece = piece.class.new(piece.color, new_board, pos)
         new_piece.moved = piece.moved if new_piece.is_a?(Pawn)
+        new_piece.side = piece.side if new_piece.is_a?(Rook)
         new_board[pos] = new_piece
       else
         new_board[pos] = " "
@@ -42,7 +43,7 @@ class Board
   end
 
   def find_rook(side, color)
-    each do |piece|
+    each do |row, piece|
       if piece.is_a?(Rook) && piece.side == side && piece.color == color
         return piece
       end
@@ -87,10 +88,11 @@ class Board
   private
 
     def back_line(color, row)
-      BACK_ROW.map.with_index do |piece, idx|
-        piece.new(color, self, [row, idx])
+      BACK_ROW.map.with_index do |klass, idx|
+        piece = klass.new(color, self, [row, idx])
         piece.side = :left if idx == 0
         piece.side = :right if idx == 7
+        piece
       end
     end
 

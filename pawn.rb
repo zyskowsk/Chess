@@ -15,7 +15,7 @@ class Pawn < Piece
     moves = []
     moves << Piece.vector_add(@position, @direction)
     unless @moved
-      moves << Piece.vector_add(@position, Piece.vector_multiply(@direction, 2))
+      moves << add_displacement(@direction, 2)
     end
     moves.select! { |pos| valid_move?(pos) }
 

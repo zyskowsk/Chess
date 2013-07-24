@@ -64,6 +64,8 @@ class Chess
     def play_turn(player)
       begin
         puts @board
+        if @board.find_king(player).can_castle? #write this
+          #
         piece = get_piece_position(player)
         pos = get_move_position(piece)
         make_move(piece, pos)
