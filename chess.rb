@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 load './pieces.rb'
 load './knight.rb'
 load './rook.rb'
@@ -16,6 +18,7 @@ class Chess
   end
 
   def run
+    puts @board
     player = @board.colors.first
     until @board.find_king(player).in_checkmate?
       play_turn(player)
@@ -73,7 +76,6 @@ class Chess
 
     def play_turn(player)
       begin
-        puts @board
         if @board.find_king(player).can_castle?
           response = get_castle_command
           unless response == "no"
@@ -88,6 +90,8 @@ class Chess
         puts e.message
         retry
       end
+
+      puts @board
     end
 end
 
@@ -110,4 +114,9 @@ class NotYourPieceError < RuntimeError
   def initialize(msg = "That's not one of your pieces.")
     super(msg)
   end
+end
+
+if __FILE__ == $PROGRAM_NAME
+  game = Chess.new
+  game.run
 end
