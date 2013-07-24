@@ -1,9 +1,8 @@
 class Bishop < Slider
+
   def initialize(color, board, pos)
     super(color, board, pos)
-
-    @directions = [[-1,-1], [1,1],
-                   [-1,1], [1,-1]]
+    @directions = DIAGONAL_DIRECTIONS
   end
 
   def to_s

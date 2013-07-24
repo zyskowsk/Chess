@@ -3,6 +3,9 @@ require 'colorize'
 class Piece
   attr_reader :color, :position
 
+  DIAGONAL_DIRECTIONS = [[-1, -1], [1, 1], [-1, 1], [1, -1]]
+  CARDINAL_DIRECTIONS = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+
   def self.vector_add(pos, disp)
     pos.map.with_index { |coord, idx| coord + disp[idx] }
   end

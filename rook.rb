@@ -1,8 +1,8 @@
 class Rook < Slider
+
   def initialize(color, board, pos)
     super(color, board, pos)
-    @directions = [[-1,0], [1,0],
-                   [0,-1], [0,1]]
+    @directions = CARDINAL_DIRECTIONS
   end
 
   def to_s
