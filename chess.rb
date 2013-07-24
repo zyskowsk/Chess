@@ -1,11 +1,12 @@
 load './pieces.rb'
-load './pawn.rb'
 load './knight.rb'
 load './rook.rb'
 load './bishop.rb'
 load './queen.rb'
 load './king.rb'
+load './pawn.rb'
 load './board.rb'
+
 require 'colorize'
 class Chess
 

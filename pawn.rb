@@ -1,9 +1,12 @@
 class Pawn < Piece
   attr_accessor :moved
+  PIECE_CLASSES = { "Queen" => Queen, "Bishop" => Bishop,
+                    "Rook" => Rook, "Knight" => Knight }
 
   def initialize(color, board, pos)
     super(color, board, pos)
     @direction = get_direction
+    @initial_row = pos.first
     @moved = false
   end
 
@@ -18,9 +21,32 @@ class Pawn < Piece
     moves + threatened_opponents
   end
 
+  def promote
+    puts "Which piece type would you like to promote to?"
+    piece = gets.chomp.capitalize!
+    unless PIECE_CLASSES.has_key?(piece)
+      raise InvalidInputError.new("Not a piece type")
+    end
+    klass = PIECE_CLASSES[piece]
+    @board[@position] = klass.new(@color, @board, @position)
+  end
+
+  def promotion_row
+    @initial_row + @direction.first * 6
+  end
+
   def move(pos)
     @moved = true
     super(pos)
+
+    begin
+      if @position.first == promotion_row
+        promote
+      end
+    rescue InvalidInputError => e
+      puts e.message
+      retry
+    end
   end
 
   def to_s
@@ -30,7 +56,7 @@ class Pawn < Piece
   private
 
     def get_direction
-      @color == @board.color.first ? [-1,0] : [1,0]
+      @color == @board.colors.first ? [-1,0] : [1,0]
     end
 
     def kill_directions
