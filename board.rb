@@ -1,33 +1,12 @@
 class Board
+  attr_accessor :colors
+
+  BACK_ROW = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
+
   def initialize
     @grid = (0...8).map { |row| [" "] * 8 }
     @colors = [:white, :blue]
     populate
-  end
-
-  # Add instance variable for colors
-  def populate
-    @grid[7] = back_line(:white, 7)
-    @grid[6] = Array.new(8).map.with_index do |_, idx|
-      Pawn.new(:white, self, [6, idx])
-    end
-    @grid[0] = back_line(:blue, 0)
-    @grid[1] = Array.new(8).map.with_index do |_, idx|
-      Pawn.new(:blue, self, [1, idx])
-    end
-  end
-
-
-  def back_line(color, row)
-    back_line = [Rook.new(color, self, [row, 0]),
-                 Knight.new(color, self, [row, 1]),
-                 Bishop.new(color, self, [row, 2]),
-                 Queen.new(color, self, [row, 3]),
-                 King.new(color, self, [row, 4]),
-                 Bishop.new(color, self, [row, 5]),
-                 Knight.new(color, self, [row, 6]),
-                 Rook.new(color, self, [row, 7])]
-    back_line
   end
 
   def []=(pos, piece)
@@ -38,19 +17,16 @@ class Board
     @grid[pos.first][pos.last]
   end
 
-  #refactor
   def dup
     new_board = Board.new
-    @grid.each_with_index do |row, i|
-      row.each_with_index do |piece, j|
-        pos = [i,j]
-        if piece.is_a?(Piece)
-          new_piece = piece.class.new(piece.color, new_board, pos)
-          new_piece.moved = piece.moved if new_piece.is_a?(Pawn)
-          new_board[pos] = new_piece
-        else
-          new_board[pos] = " "
-        end
+    each_with_index do |row, i, piece, j|
+      pos = [i,j]
+      if piece.is_a?(Piece)
+        new_piece = piece.class.new(piece.color, new_board, pos)
+        new_piece.moved = piece.moved if new_piece.is_a?(Pawn)
+        new_board[pos] = new_piece
+      else
+        new_board[pos] = " "
       end
     end
 
@@ -58,19 +34,17 @@ class Board
   end
 
   def find_king(color)
-    @grid.each do |row|
-      row.each do |piece|
-        return piece if piece.is_a?(King) && piece.color == color
-      end
+    each do |row, piece|
+      return piece if piece.is_a?(King) && piece.color == color
     end
+
+    nil
   end
 
   def get_all_pieces(color)
     pieces = []
-    @grid.each do |row|
-      row.each do |piece|
-        pieces << piece if piece.is_a?(Piece) && piece.color == color
-      end
+    each do |row, piece|
+      pieces << piece if piece.is_a?(Piece) && piece.color == color
     end
 
     pieces
@@ -101,4 +75,47 @@ class Board
 
     ret_str
   end
+
+  private
+
+    def back_line(color, row)
+      BACK_ROW.map.with_index do |piece, idx|
+        piece.new(color, self, [row, idx])
+      end
+    end
+
+    def each(&block)
+      @grid.each do |row|
+        row.each do |piece|
+          block.call(row, piece)
+        end
+      end
+    end
+
+    def each_with_index(&block)
+      @grid.each_with_index do |row, i|
+        row.each_with_index do |piece, j|
+          block.call(row, i, piece, j)
+        end
+      end
+    end
+
+    def populate
+      set_white_pieces
+      set_black_pieces
+    end
+
+    def set_black_pieces
+      @grid[0] = back_line(@colors.last, 0)
+      @grid[1].map!.with_index do |_, idx|
+        Pawn.new(@colors.last, self, [1, idx])
+      end
+    end
+
+    def set_white_pieces
+      @grid[7] = back_line(@colors.first, 7)
+      @grid[6].map!.with_index do |_, idx|
+        Pawn.new(@colors.first, self, [6, idx])
+      end
+    end
 end

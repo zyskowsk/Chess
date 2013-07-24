@@ -14,7 +14,7 @@ class Chess
   end
 
   def run
-    player = :white
+    player = @board.colors.first
     until @board.find_king(player).in_checkmate?
       play_turn(player)
       player = @board.other_color(player)
@@ -63,7 +63,8 @@ class Chess
     def play_turn(player)
       begin
         puts @board
-        piece, pos =  get_piece_position(player), get_move_position(piece)
+        piece = get_piece_position(player)
+        pos = get_move_position(piece)
         make_move(piece, pos)
       rescue StandardError => e
         puts e.message
