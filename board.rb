@@ -1,12 +1,3 @@
-load './pieces.rb'
-load './pawn.rb'
-load './knight.rb'
-load './rook.rb'
-load './bishop.rb'
-load './queen.rb'
-load './king.rb'
-require 'colorize'
-
 class Board
   def initialize
     @grid = (0...8).map { |row| [" "] * 8 }
