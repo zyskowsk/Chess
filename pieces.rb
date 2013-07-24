@@ -15,9 +15,14 @@ class Piece
     @position = pos
   end
 
+  def move_defends_king?(pos)
+    new_board = @board.dup
+    king = new_board.find_king(@color)
+    new_board[@position].move(pos)
+    not king.in_check?
+  end
+
   def valid_move?(pos)
-    # p "on board? #{pos.all? { |coord| (0...8).include?(coord) }}"
-    # p "piece there? "
     pos.all? { |coord| (0...8).include?(coord) } &&
       (@board.open?(pos) || @board.opponent_piece?(pos, @color))
   end

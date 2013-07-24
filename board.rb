@@ -66,6 +66,14 @@ class Board
     new_board
   end
 
+  def find_king(color)
+    @grid.each do |row|
+      row.each do |piece|
+        return piece if piece.is_a?(King) && piece.color == color
+      end
+    end
+  end
+
   def get_all_pieces(color)
     pieces = []
     @grid.each do |row|
