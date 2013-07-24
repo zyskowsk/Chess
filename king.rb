@@ -3,7 +3,30 @@ class King < Stepper
   def initialize(color, board, pos)
     super(color, board, pos)
     @directions = DIAGONAL_DIRECTIONS + CARDINAL_DIRECTIONS
+    @moved = false
+  end
 
+  def can_castle_with?(rook)
+    !@moved && !self.in_check? && !rook.moved? &&
+    castle_defends_king(rook) && #nothing between me and rook
+
+
+  end
+
+  def castle_left(rook)
+
+  end
+
+  def castle_right
+
+  end
+
+  def castle(side)
+    side = side.to_sym
+    rook = @board.find_rook(side, @color)
+    if can_castle_with?(rook)
+
+    end
   end
 
   def in_check?
@@ -26,6 +49,11 @@ class King < Stepper
     end
 
     true
+  end
+
+  def move(pos)
+    @moved = true
+    super(pos)
   end
 
   def to_s

@@ -12,10 +12,11 @@ class Pawn < Piece
 
   # Refactor maybe
   def available_moves
-    move_two = @direction.map { |num| num * 2 }
     moves = []
     moves << Piece.vector_add(@position, @direction)
-    moves << Piece.vector_add(@position, move_two) unless @moved
+    unless @moved
+      moves << Piece.vector_add(@position, Piece.vector_multiply(@direction, 2))
+    end
     moves.select! { |pos| valid_move?(pos) }
 
     moves + threatened_opponents

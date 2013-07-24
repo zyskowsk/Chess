@@ -41,6 +41,14 @@ class Board
     nil
   end
 
+  def find_rook(side, color)
+    each do |piece|
+      if piece.is_a?(Rook) && piece.side == side && piece.color == color
+        return piece
+      end
+    end
+  end
+
   def get_all_pieces(color)
     pieces = []
     each do |row, piece|
@@ -81,6 +89,8 @@ class Board
     def back_line(color, row)
       BACK_ROW.map.with_index do |piece, idx|
         piece.new(color, self, [row, idx])
+        piece.side = :left if idx == 0
+        piece.side = :right if idx == 7
       end
     end
 

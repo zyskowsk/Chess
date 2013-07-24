@@ -11,6 +11,10 @@ class Piece
     pos.map.with_index { |coord, idx| coord + disp[idx] }
   end
 
+  def self.scalar_multiply(disp, factor)
+    disp.map { |coord| coord * factor }
+  end
+
   def initialize(color, board, position)
     @color = color
     @board = board
