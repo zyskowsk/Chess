@@ -3,6 +3,10 @@ require 'colorize'
 class Piece
   attr_reader :color, :position
 
+  def self.vector_add(pos, disp)
+    pos.map.with_index { |coord, idx| coord + disp[idx] }
+  end
+
   def initialize(color, board, position)
     @color = color
     @board = board
@@ -19,6 +23,7 @@ class Piece
     new_board = @board.dup
     king = new_board.find_king(@color)
     new_board[@position].move(pos)
+
     not king.in_check?
   end
 
@@ -26,11 +31,6 @@ class Piece
     pos.all? { |coord| (0...8).include?(coord) } &&
       (@board.open?(pos) || @board.opponent_piece?(pos, @color))
   end
-
-  def vector_add(pos, disp)
-    pos.map.with_index { |coord, idx| coord + disp[idx] }
-  end
-
 end
 
 class Slider < Piece
@@ -41,12 +41,12 @@ class Slider < Piece
   def available_moves
     moves = []
     @directions.each do |direction|
-      curr_pos = vector_add(@position, direction)
+      curr_pos = Piece.vector_add(@position, direction)
 
       while valid_move?(curr_pos)
         moves << curr_pos
         break if @board.opponent_piece?(curr_pos, @color)
-        curr_pos = vector_add(curr_pos, direction)
+        curr_pos = Piece.vector_add(curr_pos, direction)
       end
     end
 
@@ -62,7 +62,7 @@ class Stepper < Piece
   def available_moves
     moves = []
     @directions.each do |direction|
-      moves << vector_add(@position, direction)
+      moves << Piece.vector_add(@position, direction)
     end
 
     moves.select { |pos| valid_move?(pos) }
