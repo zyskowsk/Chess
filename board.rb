@@ -47,15 +47,34 @@ class Board
     @grid[pos.first][pos.last]
   end
 
-  def get_all_pieces(color)
-    locations = []
+  #refactor
+  def dup
+    new_board = Board.new
     @grid.each_with_index do |row, i|
       row.each_with_index do |piece, j|
-        locations << [i,j] if piece.is_a?(Piece) && piece.color == color
+        pos = [i,j]
+        if piece.is_a?(Piece)
+          new_piece = piece.class.new(piece.color, new_board, pos)
+          new_piece.moved = piece.moved if new_piece.is_a?(Pawn)
+          new_board[pos] = new_piece
+        else
+          new_board[pos] = " "
+        end
       end
     end
 
-    locations
+    new_board
+  end
+
+  def get_all_pieces(color)
+    pieces = []
+    @grid.each do |row|
+      row.each do |piece|
+        pieces << piece if piece.is_a?(Piece) && piece.color == color
+      end
+    end
+
+    pieces
   end
 
   def occupied?(pos)
@@ -68,6 +87,10 @@ class Board
 
   def opponent_piece?(pos, color)
     self.occupied?(pos) && (self[pos].color != color)
+  end
+
+  def other_color(color)
+    @colors.first == color ? @colors.last : @colors.first
   end
 
   def to_s

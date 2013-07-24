@@ -1,4 +1,5 @@
 class Pawn < Piece
+  attr_accessor :moved
   def initialize(color, board, pos)
     super(color, board, pos)
     @direction = get_direction

@@ -7,6 +7,14 @@ class King < Stepper
 
   end
 
+  def in_check?
+    opponent_color = @board.other_color(@color)
+    all_opponent_pieces = @board.get_all_pieces(opponent_color)
+    all_opponent_pieces.any? do |piece|
+      piece.available_moves.include?(@position)
+    end
+  end
+
   def to_s
     "K".colorize(@color)
   end
