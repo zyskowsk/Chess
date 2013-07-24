@@ -15,6 +15,20 @@ class King < Stepper
     end
   end
 
+  def in_checkmate?
+    my_pieces = @board.get_all_pieces(@color)
+    my_pieces.each do |piece|
+      if piece.available_moves.any? do |move|
+          piece.move_defends_king?(move)
+        end
+
+        return false
+      end
+    end
+
+    true
+  end
+
   def to_s
     "K".colorize(@color)
   end
