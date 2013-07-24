@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 class Bishop < Slider
 
   def initialize(color, board, pos)
@@ -6,6 +8,6 @@ class Bishop < Slider
   end
 
   def to_s
-    "B".colorize(@color)
+    "♝"
   end
 end

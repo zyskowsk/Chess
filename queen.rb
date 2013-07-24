@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 class Queen < Slider
 
   def initialize(color, board, pos)
@@ -6,6 +8,6 @@ class Queen < Slider
   end
 
   def to_s
-    "Q".colorize(@color)
+    "♛"
   end
 end

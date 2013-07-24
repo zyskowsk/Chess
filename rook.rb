@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 class Rook < Slider
   attr_accessor :side, :moved
 
@@ -14,6 +16,6 @@ class Rook < Slider
   end
 
   def to_s
-    "R".colorize(@color)
+    "♜"
   end
 end

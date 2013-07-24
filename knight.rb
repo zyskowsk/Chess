@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 class Knight < Stepper
 
   def initialize(color, board, pos)
@@ -9,6 +11,6 @@ class Knight < Stepper
   end
 
   def to_s
-    "N".colorize(@color)
+    "♞"
   end
 end

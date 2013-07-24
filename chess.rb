@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# encoding: UTF-8
 
 load './pieces.rb'
 load './knight.rb'
@@ -80,6 +81,7 @@ class Chess
           response = get_castle_command
           unless response == "no"
             @board.find_king(player).castle(response)
+            puts @board
             return
           end
         end

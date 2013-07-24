@@ -1,3 +1,4 @@
+# encoding: UTF-8
 class Pawn < Piece
   attr_accessor :moved
   PIECE_CLASSES = { "Queen" => Queen, "Bishop" => Bishop,
@@ -51,7 +52,7 @@ class Pawn < Piece
   end
 
   def to_s
-    "P".colorize(@color)
+    "♟"
   end
 
   private

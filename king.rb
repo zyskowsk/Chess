@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 class King < Stepper
 
   def initialize(color, board, pos)
@@ -71,7 +73,6 @@ class King < Stepper
     new_board = @board.dup
     king = new_board.find_king(@color)
     rook = new_board.find_rook(side, @color)
-    p "Rook : Side #{rook}, #{side}"
     king.castle_left_or_right(rook)
     not king.in_check?
   end
@@ -104,6 +105,6 @@ class King < Stepper
   end
 
   def to_s
-    "K".colorize(@color)
+    '♚'
   end
 end

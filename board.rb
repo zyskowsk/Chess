@@ -1,11 +1,11 @@
 class Board
   attr_accessor :colors
-
+  attr_accessor :grid
   BACK_ROW = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
 
   def initialize
     @grid = (0...8).map { |row| [" "] * 8 }
-    @colors = [:white, :blue]
+    @colors = [:blue, :red]
     populate
   end
 
@@ -76,16 +76,21 @@ class Board
   end
 
   def to_s
-    ret_str = "#{"-" * 33}\n"
-    @grid.each do |row|
-      ret_str << "| #{row.map(&:to_s).join(" | ")} |\n"
-      ret_str << "#{"-" * 33}\n"
+    letters_row = "   " + ("0"..."8").to_a.join(" ") + "\n"
+
+    ret_str = ""
+    @grid.each_with_index do |row, i|
+      ret_str << "#{i} #{row_string(row, i)} #{i}\n"
     end
 
-    ret_str
+    letters_row + ret_str + letters_row
   end
 
   private
+
+    def back_color(num)
+      num == 0 ? :white : :black
+    end
 
     def back_line(color, row)
       BACK_ROW.map.with_index do |klass, idx|
@@ -115,6 +120,17 @@ class Board
     def populate
       set_white_pieces
       set_black_pieces
+    end
+
+    def row_string(row, row_num)
+      row.map.with_index do |space, idx|
+        if space.is_a?(Piece)
+          "#{space} ".colorize(:color => space.color,
+                                :background => back_color((row_num + idx) % 2))
+        else
+          "#{space} ".colorize(:background => back_color((row_num + idx) % 2))
+        end
+      end.join
     end
 
     def set_black_pieces
