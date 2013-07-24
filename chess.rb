@@ -26,6 +26,13 @@ class Chess
 
   private
 
+    def get_castle_command
+      puts "Do you want to castle? (left/right/no)"
+      input = gets.chomp
+      raise InvalidInputError.new unless ["left", "right", "no"].include?(input)
+      input
+    end
+
     def get_coordinates
       input = gets.chomp.split(" ").map { |coord| Integer(coord) }
       raise InvalidInputError.new unless input.length == 2
@@ -64,8 +71,13 @@ class Chess
     def play_turn(player)
       begin
         puts @board
-        if @board.find_king(player).can_castle? #write this
-          #
+        if @board.find_king(player).can_castle?
+          response = get_castle_command
+          unless response == "no"
+            @board.find_king(player).castle(response)
+            return
+          end
+        end
         piece = get_piece_position(player)
         pos = get_move_position(piece)
         make_move(piece, pos)
