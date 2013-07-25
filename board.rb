@@ -1,6 +1,6 @@
 class Board
-  attr_accessor :colors
-  attr_accessor :grid
+  attr_reader :colors
+
   BACK_ROW = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
 
   def initialize
@@ -76,14 +76,14 @@ class Board
   end
 
   def to_s
-    letters_row = "   " + ("0"..."8").to_a.join(" ") + "\n"
-
+    banner = " CHESS MASTER 90000\n " + "=" * 18 + "\n"
+    top_row = "   #{("0"..."8").to_a.join(" ")}\n"
     ret_str = ""
     @grid.each_with_index do |row, i|
       ret_str << "#{i} #{row_string(row, i)} #{i}\n"
     end
 
-    letters_row + ret_str + letters_row
+    banner + top_row + ret_str + top_row
   end
 
   private
@@ -122,6 +122,7 @@ class Board
       set_black_pieces
     end
 
+    # Refactor
     def row_string(row, row_num)
       row.map.with_index do |space, idx|
         if space.is_a?(Piece)

@@ -1,4 +1,5 @@
 # encoding: UTF-8
+
 class Pawn < Piece
   attr_accessor :moved
   PIECE_CLASSES = { "Queen" => Queen, "Bishop" => Bishop,
@@ -11,30 +12,13 @@ class Pawn < Piece
     @moved = false
   end
 
-  # Refactor maybe
   def available_moves
     moves = []
     moves << Piece.vector_add(@position, @direction)
-    unless @moved
-      moves << add_displacement(@direction, 2)
-    end
+    moves << add_displacement(@direction, 2) unless @moved
     moves.select! { |pos| valid_move?(pos) }
 
     moves + threatened_opponents
-  end
-
-  def promote
-    puts "Which piece type would you like to promote to?"
-    piece = gets.chomp.capitalize!
-    unless PIECE_CLASSES.has_key?(piece)
-      raise InvalidInputError.new("Not a piece type")
-    end
-    klass = PIECE_CLASSES[piece]
-    @board[@position] = klass.new(@color, @board, @position)
-  end
-
-  def promotion_row
-    @initial_row + @direction.first * 6
   end
 
   def move(pos)
@@ -51,6 +35,16 @@ class Pawn < Piece
     end
   end
 
+  def promote
+    puts "Which piece type would you like to promote to?"
+    piece = gets.chomp.capitalize!
+    unless PIECE_CLASSES.has_key?(piece)
+      raise InvalidInputError.new("Not a piece type")
+    end
+    klass = PIECE_CLASSES[piece]
+    @board[@position] = klass.new(@color, @board, @position)
+  end
+
   def to_s
     "♟"
   end
@@ -63,6 +57,10 @@ class Pawn < Piece
 
     def kill_directions
       [[0,1], [0,-1]].map { |side| Piece.vector_add(side, @direction) }
+    end
+
+    def promotion_row
+      @initial_row + @direction.first * 6
     end
 
     # Use direction to determine which diagonals to check.

@@ -1,16 +1,15 @@
 #!/usr/bin/env ruby
-# encoding: UTF-8
 
-load './pieces.rb'
-load './knight.rb'
-load './rook.rb'
-load './bishop.rb'
-load './queen.rb'
-load './king.rb'
-load './pawn.rb'
-load './board.rb'
-
+require './pieces.rb'
+require './knight.rb'
+require './rook.rb'
+require './bishop.rb'
+require './queen.rb'
+require './king.rb'
+require './pawn.rb'
+require './board.rb'
 require 'colorize'
+
 class Chess
   attr_accessor :board
 
@@ -19,9 +18,11 @@ class Chess
   end
 
   def run
+    system "clear"
     puts @board
     player = @board.colors.first
     until @board.find_king(player).in_checkmate?
+      puts "You are in check!" if @board.find_king(player).in_check?
       play_turn(player)
       player = @board.other_color(player)
     end
@@ -34,7 +35,9 @@ class Chess
     def get_castle_command
       puts "Do you want to castle? (left/right/no)"
       input = gets.chomp
-      raise InvalidInputError.new unless ["left", "right", "no"].include?(input)
+      unless ["left", "right", "no"].include?(input)
+        raise InvalidInputError.new
+      end
       input
     end
 
@@ -47,11 +50,12 @@ class Chess
     def get_move_position(piece)
       puts "Where do you want to move " +
            "your #{piece.class.to_s.downcase}? (row col)"
+
       get_coordinates
     end
 
     def get_piece_position(player)
-      puts "What piece do you want to move? (row col)"
+      puts "What piece do you want to move, #{player}? (row col)"
       pos = get_coordinates
       piece = @board[pos]
 
@@ -75,12 +79,14 @@ class Chess
       piece.move(pos)
     end
 
+    # Too long
     def play_turn(player)
       begin
         if @board.find_king(player).can_castle?
           response = get_castle_command
           unless response == "no"
             @board.find_king(player).castle(response)
+            system "clear"
             puts @board
             return
           end
@@ -92,7 +98,7 @@ class Chess
         puts e.message
         retry
       end
-
+      system "clear"
       puts @board
     end
 end
