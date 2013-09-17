@@ -7,6 +7,6 @@ If you would like to play the game:
 1. Grab a friend
 2. Clone this repo
 3. Navigate to the Chess directory
-4. run ./lib/chess.rb
+4. run <code>./lib/chess.rb</code>
 5. Enjoy!
 
