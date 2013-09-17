@@ -1,5 +1,5 @@
-### Chess
-*********
+Chess
+=====
 
 #### Description
 This is a command line based chess game that I built as an excercise in object-oriented design. If
